@@ -12,10 +12,14 @@ class EmailBackendProvider:
     def __init__(self, key=None):
         hosts_config = env(DEFAULT_CONF)
         self.fallback = get_connection()
-        self.backends = {
-            k: EmailBackend(**dj_email_url.parse(url))
-            for k, url in hosts_config.items()
-        }
+        self.backends = (
+            {
+                k: EmailBackend(**dj_email_url.parse(url))
+                for k, url in hosts_config.items()
+            }
+            if hosts_config
+            else None
+        )
         if key:
             return self.get_backend(key)
 
