@@ -24,7 +24,7 @@ class EmailBackendProvider:
             return self.get_backend(key)
 
     def get_backend(self, key):
-        if key in self.backends:
+        if self.backends and key in self.backends:
             return self.backends[key]
         elif self.fallback:
             return self.fallback
