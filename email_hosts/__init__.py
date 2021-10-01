@@ -1,7 +1,7 @@
 import dj_email_url
+from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import get_connection
 from django.core.mail.backends.smtp import EmailBackend
-from django.core.exceptions import ImproperlyConfigured
 from speckenv import env
 
 
