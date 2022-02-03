@@ -5,7 +5,7 @@ from django.core.mail import EmailMessage
 from django.test import TestCase
 from django.test.utils import override_settings
 
-from email_hosts.backends import parse_conf, use_backend
+from email_hosts.backends import get_connection, parse_conf
 
 
 class EmailHostsTest(TestCase):
@@ -31,19 +31,19 @@ class EmailHostsTest(TestCase):
             "de": "submission://USER:PASSWORD@smtp.mailgun.com?_default_from_email=info@example.org",
         },
     )
-    def test_use_backend(self):
-        self.assertEqual(use_backend("en").host, "smtp.sendgrid.com")
-        self.assertEqual(use_backend("de").host, "smtp.mailgun.com")
+    def test_get_connection(self):
+        self.assertEqual(get_connection("en").host, "smtp.sendgrid.com")
+        self.assertEqual(get_connection("de").host, "smtp.mailgun.com")
 
-        self.assertEqual(use_backend("en").default_from_email, "")
-        self.assertEqual(use_backend("de").default_from_email, "info@example.org")
+        self.assertEqual(get_connection("en").default_from_email, "")
+        self.assertEqual(get_connection("de").default_from_email, "info@example.org")
 
         with mock.patch("smtplib.SMTP", autospec=True) as mock_smtp:
             EmailMessage(
                 "Hello",
                 "World",
                 to=["recipient@example.com"],
-                connection=use_backend("en"),
+                connection=get_connection("en"),
             ).send()
 
             mock_smtp.assert_called()
@@ -63,7 +63,7 @@ class EmailHostsTest(TestCase):
                 "Hello",
                 "World",
                 to=["recipient@example.com"],
-                connection=use_backend("de"),
+                connection=get_connection("de"),
             ).send()
 
             mock_smtp.assert_called()
