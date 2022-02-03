@@ -47,10 +47,10 @@ An example configuration (which is possibly nonsensical) looks like this:
     }
 
 This configuration creates two SMTP backends, one using sendgrid and one using
-mailgun. The ``_default_from_email`` is completely optional but if it is
-provided at the configuration level it always overrides the sender address
-(that is, it cannot be overridden by specifying ``from_email`` on an email
-address).
+mailgun. The ``_default_from_email`` is completely optional. If the email
+message's ``from_email`` isn't set (resp. is equal to the
+``DEFAULT_FROM_EMAIL`` setting) it automatically defaults to the per-backend
+value.
 
 
 ``email_hosts.backends.get_connection``

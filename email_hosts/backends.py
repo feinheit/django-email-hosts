@@ -33,7 +33,10 @@ class EmailHostsBackend(EmailBackend):
         return backend
 
     def _send(self, email_message):
-        if self.default_from_email:
+        if (
+            self.default_from_email
+            and email_message.from_email == settings.DEFAULT_FROM_EMAIL
+        ):
             email_message.from_email = self.default_from_email
         return super()._send(email_message)
 
