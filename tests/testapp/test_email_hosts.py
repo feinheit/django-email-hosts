@@ -9,8 +9,8 @@ from email_hosts.backends import get_connection, parse_conf
 
 
 EMAIL_HOSTS = {
-    "en": "submission://USER:PASSWORD@smtp.sendgrid.com",
-    "de": "submission://USER:PASSWORD@smtp.mailgun.com?_default_from_email=info@example.org",
+    "one": "submission://USER:PASSWORD@smtp.sendgrid.com",
+    "two": "submission://USER:PASSWORD@smtp.mailgun.com?_default_from_email=info@example.org",
 }
 
 
@@ -33,11 +33,11 @@ class EmailHostsTest(TestCase):
 
     @override_settings(EMAIL_HOSTS=EMAIL_HOSTS)
     def test_get_connection(self):
-        self.assertEqual(get_connection("en").host, "smtp.sendgrid.com")
-        self.assertEqual(get_connection("de").host, "smtp.mailgun.com")
+        self.assertEqual(get_connection("one").host, "smtp.sendgrid.com")
+        self.assertEqual(get_connection("two").host, "smtp.mailgun.com")
 
-        self.assertEqual(get_connection("en").default_from_email, "")
-        self.assertEqual(get_connection("de").default_from_email, "info@example.org")
+        self.assertEqual(get_connection("one").default_from_email, "")
+        self.assertEqual(get_connection("two").default_from_email, "info@example.org")
 
         self.assertTrue(get_connection("nothing"))
 
@@ -48,7 +48,7 @@ class EmailHostsTest(TestCase):
                 "Hello",
                 "World",
                 to=["recipient@example.com"],
-                connection=get_connection("en"),
+                connection=get_connection("one"),
             ).send()
 
             mock_smtp.assert_called()
@@ -70,7 +70,7 @@ class EmailHostsTest(TestCase):
                 "Hello",
                 "World",
                 to=["recipient@example.com"],
-                connection=get_connection("de"),
+                connection=get_connection("two"),
             ).send()
 
             mock_smtp.assert_called()
@@ -93,7 +93,7 @@ class EmailHostsTest(TestCase):
                 "World",
                 to=["recipient@example.com"],
                 from_email="no-reply@example.com",
-                connection=get_connection("de"),
+                connection=get_connection("two"),
             ).send()
 
             mock_smtp.assert_called()

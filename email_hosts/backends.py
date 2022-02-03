@@ -6,6 +6,9 @@ from django.core.mail import get_connection as _orig_get_connection
 from django.core.mail.backends.smtp import EmailBackend
 
 
+__all__ = ["get_connection"]
+
+
 def parse_conf(settings):
     kwargs = {
         "host": settings["EMAIL_HOST"],
@@ -25,13 +28,6 @@ def parse_conf(settings):
 
 
 class EmailHostsBackend(EmailBackend):
-    @classmethod
-    def from_dsn(cls, dsn):
-        config = dj_email_url.parse(dsn)
-        backend = cls(**parse_conf(config))
-        backend.default_from_email = config.get("DEFAULT_FROM_EMAIL", "")
-        return backend
-
     def _send(self, email_message):
         if (
             self.default_from_email
@@ -44,5 +40,8 @@ class EmailHostsBackend(EmailBackend):
 @cache
 def get_connection(key):
     if dsn := settings.EMAIL_HOSTS.get(key):
-        return EmailHostsBackend.from_dsn(dsn)
+        config = dj_email_url.parse(dsn)
+        backend = EmailHostsBackend(**parse_conf(config))
+        backend.default_from_email = config.get("DEFAULT_FROM_EMAIL", "")
+        return backend
     return _orig_get_connection()
