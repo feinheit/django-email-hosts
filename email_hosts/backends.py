@@ -2,7 +2,7 @@ from functools import cache
 
 import dj_email_url
 from django.conf import settings
-from django.core.mail import get_connection
+from django.core.mail import get_connection as _orig_get_connection
 from django.core.mail.backends.smtp import EmailBackend
 
 
@@ -39,7 +39,7 @@ class EmailHostsBackend(EmailBackend):
 
 
 @cache
-def use_backend(key):
+def get_connection(key):
     if dsn := settings.EMAIL_HOSTS.get(key):
         return EmailHostsBackend.from_dsn(dsn)
-    return get_connection()
+    return _orig_get_connection()
