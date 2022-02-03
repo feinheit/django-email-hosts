@@ -27,11 +27,15 @@ def parse_conf(settings):
 class EmailHostsBackend(EmailBackend):
     @classmethod
     def from_dsn(cls, dsn):
-        kwargs = parse_conf(dj_email_url.parse(dsn))
-        default_from_email = kwargs.pop("DEFAULT_FROM_EMAIL", "")
-        backend = cls(**kwargs)
-        backend.default_from_email = default_from_email
+        config = dj_email_url.parse(dsn)
+        backend = cls(**parse_conf(config))
+        backend.default_from_email = config.get("DEFAULT_FROM_EMAIL", "")
         return backend
+
+    def _send(self, email_message):
+        if self.default_from_email:
+            email_message.from_email = self.default_from_email
+        return super()._send(email_message)
 
 
 @cache
