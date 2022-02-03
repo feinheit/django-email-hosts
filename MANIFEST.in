@@ -1,0 +1,6 @@
+include LICENSE
+include MANIFEST.in
+include README.rst
+recursive-include email_hosts/static *
+recursive-include email_hosts/locale *
+recursive-include email_hosts/templates *
