@@ -7,6 +7,8 @@ Change log
 - Removed the ``functools.cache`` decorator from ``get_connection`` --
   constructing backends isn't that expensive and the danger of memory leaks
   when misusing the connection management is worse.
+- Removed support for the ``ssl_keyfile`` and ``ssl_certfile`` parameters since
+  they are never returned by ``dj-email-url`` anyway.
 
 
 `0.1`_ (2022-02-03)

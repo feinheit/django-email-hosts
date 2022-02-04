@@ -18,10 +18,6 @@ def parse_conf(settings):
     }
     if timeout := settings.get("EMAIL_TIMEOUT"):
         kwargs["timeout"] = timeout
-    if ssl_keyfile := settings.get("EMAIL_SSL_KEYFILE"):
-        kwargs["ssl_keyfile"] = ssl_keyfile
-    if ssl_certfile := settings.get("EMAIL_SSL_CERTFILE"):
-        kwargs["ssl_certfile"] = ssl_certfile
     return kwargs
 
 
