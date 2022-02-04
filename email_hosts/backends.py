@@ -22,13 +22,12 @@ def parse_conf(settings):
 
 
 class EmailHostsBackend(EmailBackend):
-    def _send(self, email_message):
-        if (
-            self.default_from_email
-            and email_message.from_email == settings.DEFAULT_FROM_EMAIL
-        ):
-            email_message.from_email = self.default_from_email
-        return super()._send(email_message)
+    def send_messages(self, email_messages):
+        if default := self.default_from_email:
+            for message in email_messages:
+                if message.from_email == settings.DEFAULT_FROM_EMAIL:
+                    message.from_email = default
+        return super().send_messages(email_messages)
 
 
 def get_connection(key):

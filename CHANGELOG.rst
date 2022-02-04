@@ -9,6 +9,8 @@ Change log
   when misusing the connection management is worse.
 - Removed support for the ``ssl_keyfile`` and ``ssl_certfile`` parameters since
   they are never returned by ``dj-email-url`` anyway.
+- Changed the implementation to use documented APIs instead of undocumented
+  internals of Django.
 
 
 `0.1`_ (2022-02-03)
