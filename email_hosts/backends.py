@@ -1,5 +1,3 @@
-from functools import cache
-
 import dj_email_url
 from django.conf import settings
 from django.core.mail import get_connection as _orig_get_connection
@@ -37,7 +35,6 @@ class EmailHostsBackend(EmailBackend):
         return super()._send(email_message)
 
 
-@cache
 def get_connection(key):
     if dsn := settings.EMAIL_HOSTS.get(key):
         config = dj_email_url.parse(dsn)
