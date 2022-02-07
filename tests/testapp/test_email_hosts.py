@@ -1,9 +1,9 @@
 from unittest import mock
 
-import dj_email_url
 from django.core.mail import EmailMessage
 from django.test import TestCase
 from django.test.utils import override_settings
+from speckenv_django import django_email_url
 
 from email_hosts.backends import get_connection, parse_conf
 
@@ -17,7 +17,7 @@ EMAIL_HOSTS = {
 class EmailHostsTest(TestCase):
     def test_parse_conf(self):
         conf = parse_conf(
-            dj_email_url.parse("submission://USER:PASSWORD@smtp.sendgrid.com")
+            django_email_url("submission://USER:PASSWORD@smtp.sendgrid.com")
         )
         self.assertEqual(
             conf,
@@ -28,6 +28,7 @@ class EmailHostsTest(TestCase):
                 "password": "PASSWORD",
                 "use_tls": True,
                 "use_ssl": False,
+                "timeout": None,
             },
         )
 

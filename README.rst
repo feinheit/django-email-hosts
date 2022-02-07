@@ -29,12 +29,9 @@ Usage
 ``EMAIL_HOSTS``
 ===============
 
-django-email-hosts uses the excellent `dj-email-url
-<https://github.com/migonzalvar/dj-email-url>`__ library under the hood. Each
-SMTP connection is configured using a dj-email-url DSN.
-
 The keys of the ``EMAIL_HOSTS`` dictionary are defined by you and there's no
-deeper meaning to them.
+deeper meaning to them. The values are DSNs inspired by `dj-email-url
+<https://github.com/migonzalvar/dj-email-url>`__ DSNs.
 
 An example configuration (which is possibly nonsensical) looks like this:
 

@@ -11,6 +11,8 @@ Change log
   they are never returned by ``dj-email-url`` anyway.
 - Changed the implementation to use documented APIs instead of undocumented
   internals of Django.
+- Switched from ``dj-email-url`` to ``speckenv_django`` for parsing the email
+  URL.
 
 
 `0.1`_ (2022-02-03)
