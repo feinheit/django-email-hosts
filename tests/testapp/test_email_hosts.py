@@ -40,7 +40,17 @@ class EmailHostsTest(TestCase):
         self.assertEqual(get_connection("one").default_from_email, "")
         self.assertEqual(get_connection("two").default_from_email, "info@example.org")
 
-        self.assertTrue(get_connection("nothing"))
+    @override_settings(
+        EMAIL_HOSTS={},
+        # It is the default when running tests but let's be explicit anyway.
+        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+    )
+    def test_get_connection_fallback(self):
+        connection = get_connection("nothing")
+        self.assertEqual(
+            connection.__class__.__module__,
+            "django.core.mail.backends.locmem",
+        )
 
     @override_settings(EMAIL_HOSTS=EMAIL_HOSTS)
     def test_without_default_from_email(self):
