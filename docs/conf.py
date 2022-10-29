@@ -12,7 +12,7 @@ author = "Feinheit AG"
 copyright = f"2021-{date.today().year}, {author}"
 version = __import__("email_hosts").__version__
 release = subprocess.check_output(
-    "git fetch --tags; git describe", shell=True, universal_newlines=True
+    "git fetch --tags; git describe", shell=True, text=True
 ).strip()
 language = "en"
 

@@ -6,6 +6,9 @@ Change log
 
 .. _Next version: https://github.com/feinheit/django-email-hosts/compare/0.2...main
 
+- Added Django 4.1.
+- Fixed a typo in the README.
+
 
 `0.2`_ (2022-02-07)
 ~~~~~~~~~~~~~~~~~~~

@@ -66,7 +66,7 @@ follows, using the settings from above:
         "Hello",
         "World",
         to=["recipient@example.com"],
-        connection=use_backend("sendgrid"),
+        connection=get_connection("sendgrid"),
     ).send()
 
 ``get_connection`` currently silently returns the default email backend if the
