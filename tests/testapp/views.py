@@ -2,7 +2,14 @@ from content_editor.contents import contents_for_item
 from django.utils.html import format_html, mark_safe
 from django.views import generic
 
-from .models import AbstractRichText, Article, Download, Page, PageText, RichText
+from testapp.models import (
+    AbstractRichText,
+    Article,
+    Download,
+    Page,
+    PageText,
+    RichText,
+)
 
 
 def render_items(items):
@@ -24,7 +31,7 @@ class ArticleView(generic.DetailView):
                 region.key: mark_safe("".join(render_items(contents[region.key])))
                 for region in self.object.regions
             },
-            **kwargs
+            **kwargs,
         )
 
 
@@ -40,5 +47,5 @@ class PageView(generic.DetailView):
                 region.key: mark_safe("".join(render_items(contents[region.key])))
                 for region in self.object.regions
             },
-            **kwargs
+            **kwargs,
         )
