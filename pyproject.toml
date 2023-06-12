@@ -42,6 +42,9 @@ Homepage = "https://github.com/feinheit/django-email-hosts/"
 [tool.hatch.version]
 path = "email_hosts/__init__.py"
 
+[tool.hatch.build.targets.wheel]
+packages = ["email_hosts"]
+
 [tool.ruff]
 extend-select = [
   # pyflakes, pycodestyle
