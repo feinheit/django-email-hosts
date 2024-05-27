@@ -1,8 +1,9 @@
 import socket
 
-from django.core.mail import mail_admins, mail_managers, send_mail
+from django.core.mail import send_mail
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+
 from email_hosts.backends import get_connection
 
 
@@ -23,7 +24,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **kwargs):
-        subject = "Test email from %s on %s" % (socket.gethostname(), timezone.now())
+        subject = f"Test email from {socket.gethostname()} on {timezone.now()}"
 
         send_mail(
             subject=subject,
