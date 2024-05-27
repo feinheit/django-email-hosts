@@ -9,6 +9,7 @@ Change log
 - Added Django 4.1, 4.2, Python 3.11.
 - Fixed a typo in the README.
 - Modernized the package.
+- Added a command to send test mails using all configured email backends.
 
 
 `0.2`_ (2022-02-07)
