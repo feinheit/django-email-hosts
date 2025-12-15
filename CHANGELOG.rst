@@ -6,7 +6,7 @@ Change log
 
 .. _Next version: https://github.com/feinheit/django-email-hosts/compare/0.2...main
 
-- Added Django 4.1, 4.2, 5.0, Python 3.11, 3.12.
+- Added Django 4.1, 4.2, 5.0, 5.1, 5.2, 6.0, Python 3.11, 3.12, 3.13, 3.14.
 - Fixed a typo in the README.
 - Modernized the package.
 - Added a command to send test mails using all configured email backends.
