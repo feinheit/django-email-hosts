@@ -71,3 +71,29 @@ follows, using the settings from above:
 
 ``get_connection`` currently silently returns the default email backend if the
 key doesn't exist in the ``EMAIL_HOSTS`` dictionary.
+
+
+``sendtestemailhosts`` management command
+=========================================
+
+The ``sendtestemailhosts`` management command allows you to test your email
+configurations by sending test emails through a specific backend.
+
+Usage:
+
+.. code-block:: bash
+
+    python manage.py sendtestemailhosts <backend> <email> [<email> ...]
+
+The command takes a backend key from your ``EMAIL_HOSTS`` configuration as the
+first argument, followed by one or more recipient email addresses.
+
+Example using the configuration above:
+
+.. code-block:: bash
+
+    python manage.py sendtestemailhosts sendgrid test@example.com
+    python manage.py sendtestemailhosts mailgun admin@example.org recipient@example.com
+
+The test email will include the hostname and timestamp in the subject line, and
+a simple confirmation message in the body.
