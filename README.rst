@@ -50,6 +50,28 @@ message's ``from_email`` isn't set (resp. is equal to the
 value.
 
 
+Django 6.1 and ``MAILERS``
+==========================
+
+Django 6.1 introduced the ``MAILERS`` setting for configuring several email
+backends. ``email_hosts.mailers`` converts the ``EMAIL_HOSTS`` dictionary into
+``MAILERS`` entries which support the per-backend ``_default_from_email``:
+
+.. code-block:: python
+
+    from email_hosts import mailers
+
+    MAILERS = {
+        "default": {"BACKEND": "django.core.mail.backends.smtp.EmailBackend", ...},
+        **mailers(EMAIL_HOSTS),
+    }
+
+Then, send emails using Django's own API, e.g.
+``EmailMessage(...).send(using="sendgrid")``. ``get_connection`` below and the
+``sendtestemailhosts`` management command use ``MAILERS`` automatically when
+the setting is defined.
+
+
 ``email_hosts.backends.get_connection``
 =======================================
 

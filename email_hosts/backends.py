@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core import mail
 from django.core.mail import get_connection as _orig_get_connection
 from django.core.mail.backends.smtp import EmailBackend
 from speckenv_django import django_email_url
@@ -20,6 +21,10 @@ def parse_conf(settings):
 
 
 class EmailHostsBackend(EmailBackend):
+    def __init__(self, *args, default_from_email="", **kwargs):
+        super().__init__(*args, **kwargs)
+        self.default_from_email = default_from_email
+
     def send_messages(self, email_messages):
         if default := self.default_from_email:
             for message in email_messages:
@@ -29,9 +34,14 @@ class EmailHostsBackend(EmailBackend):
 
 
 def get_connection(key):
+    if hasattr(settings, "MAILERS"):
+        # Django 6.1 and better
+        return mail.mailers.get(key) or mail.mailers.default
+
     if dsn := settings.EMAIL_HOSTS.get(key):
         config = django_email_url(dsn)
-        backend = EmailHostsBackend(**parse_conf(config))
-        backend.default_from_email = config.get("DEFAULT_FROM_EMAIL", "")
-        return backend
+        return EmailHostsBackend(
+            **parse_conf(config),
+            default_from_email=config.get("DEFAULT_FROM_EMAIL", ""),
+        )
     return _orig_get_connection()

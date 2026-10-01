@@ -10,6 +10,8 @@ Change log
 - Fixed a typo in the README.
 - Modernized the package.
 - Added a command to send test mails using all configured email backends.
+- Added support for Django 6.1's ``MAILERS`` setting using
+  ``email_hosts.mailers``. Requires speckenv 6.3.
 
 
 `0.2`_ (2022-02-07)

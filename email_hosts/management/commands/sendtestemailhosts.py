@@ -1,5 +1,6 @@
 import socket
 
+from django.conf import settings
 from django.core.mail import send_mail
 from django.core.management.base import BaseCommand
 from django.utils import timezone
@@ -26,10 +27,16 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         subject = f"Test email from {socket.gethostname()} on {timezone.now()}"
 
+        if hasattr(settings, "MAILERS"):
+            # Django 6.1 and better
+            mailer = {"using": kwargs["backend"]}
+        else:
+            mailer = {"connection": get_connection(kwargs["backend"])}
+
         send_mail(
             subject=subject,
             message="If you're reading this, it was successful.",
             from_email=None,
             recipient_list=kwargs["email"],
-            connection=get_connection(kwargs["backend"]),
+            **mailer,
         )

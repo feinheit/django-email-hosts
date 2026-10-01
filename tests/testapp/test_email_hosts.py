@@ -1,11 +1,14 @@
-from unittest import mock
+from unittest import mock, skipUnless
 
+import django
 from django.core.mail import EmailMessage
+from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings
 from speckenv_django import django_email_url
 
-from email_hosts.backends import get_connection, parse_conf
+from email_hosts import mailers
+from email_hosts.backends import EmailHostsBackend, get_connection, parse_conf
 
 
 EMAIL_HOSTS = {
@@ -118,3 +121,66 @@ class EmailHostsTest(TestCase):
             lines = args[2].splitlines()
             self.assertIn(b"From: no-reply@example.com", lines)
             self.assertIn(b"To: recipient@example.com", lines)
+
+
+MAILERS = {
+    "default": {"BACKEND": "django.core.mail.backends.locmem.EmailBackend"},
+    **mailers(EMAIL_HOSTS),
+}
+
+
+@skipUnless(django.VERSION >= (6, 1), "MAILERS requires Django 6.1")
+@override_settings(MAILERS=MAILERS)
+class MailersTest(TestCase):
+    def test_mailers(self):
+        self.assertEqual(
+            mailers(EMAIL_HOSTS)["two"],
+            {
+                "BACKEND": "email_hosts.backends.EmailHostsBackend",
+                "OPTIONS": {
+                    "host": "smtp.mailgun.com",
+                    "port": 587,
+                    "username": "USER",
+                    "password": "PASSWORD",
+                    "use_tls": True,
+                    "use_ssl": False,
+                    "timeout": None,
+                    "default_from_email": "info@example.org",
+                },
+            },
+        )
+
+    def test_get_connection(self):
+        one = get_connection("one")
+        self.assertIsInstance(one, EmailHostsBackend)
+        self.assertEqual(one.host, "smtp.sendgrid.com")
+        self.assertEqual(one.default_from_email, "")
+        self.assertEqual(get_connection("two").default_from_email, "info@example.org")
+
+    def test_get_connection_fallback(self):
+        self.assertEqual(
+            get_connection("nothing").__class__.__module__,
+            "django.core.mail.backends.locmem",
+        )
+
+    def test_send_using(self):
+        with mock.patch("smtplib.SMTP", autospec=True) as mock_smtp:
+            EmailMessage("Hello", "World", to=["recipient@example.com"]).send(
+                using="two"
+            )
+
+            _name, args, _kwargs = next(
+                call for call in mock_smtp.method_calls if call[0].endswith(".sendmail")
+            )
+            self.assertEqual(args[0], "info@example.org")
+            self.assertIn(b"From: info@example.org", args[2].splitlines())
+
+    def test_sendtestemailhosts(self):
+        with mock.patch("smtplib.SMTP", autospec=True) as mock_smtp:
+            call_command("sendtestemailhosts", "two", "recipient@example.com")
+
+            _name, args, _kwargs = next(
+                call for call in mock_smtp.method_calls if call[0].endswith(".sendmail")
+            )
+            self.assertEqual(args[0], "info@example.org")
+            self.assertEqual(args[1], ["recipient@example.com"])
