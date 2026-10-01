@@ -4,6 +4,9 @@ Change log
 Next version
 ~~~~~~~~~~~~
 
+0.3 (2026-10-01)
+~~~~~~~~~~~~~~~~
+
 - Added Django 4.1, 4.2, 5.0, 5.1, 5.2, 6.0, 6.1, Python 3.11, 3.12, 3.13, 3.14.
 - Fixed a typo in the README.
 - Modernized the package.
