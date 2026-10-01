@@ -2,14 +2,14 @@ import os
 import re
 import subprocess
 import sys
-from datetime import date
+from datetime import datetime, timezone
 
 
 sys.path.append(os.path.abspath(".."))
 
 project = "django-email-hosts"
 author = "Feinheit AG"
-copyright = f"2021-{date.today().year}, {author}"
+copyright = f"2021-{datetime.now(tz=timezone.utc).year}, {author}"
 version = __import__("email_hosts").__version__
 release = subprocess.check_output(
     "git fetch --tags; git describe", shell=True, text=True

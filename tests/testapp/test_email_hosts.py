@@ -63,9 +63,9 @@ class EmailHostsTest(TestCase):
             ).send()
 
             mock_smtp.assert_called()
-            name, args, kwargs = [
+            _name, args, _kwargs = next(
                 call for call in mock_smtp.method_calls if call[0].endswith(".sendmail")
-            ][0]
+            )
 
             self.assertEqual(args[0], "webmaster@localhost")
             self.assertEqual(args[1], ["recipient@example.com"])
@@ -85,9 +85,9 @@ class EmailHostsTest(TestCase):
             ).send()
 
             mock_smtp.assert_called()
-            name, args, kwargs = [
+            _name, args, _kwargs = next(
                 call for call in mock_smtp.method_calls if call[0].endswith(".sendmail")
-            ][0]
+            )
 
             self.assertEqual(args[0], "info@example.org")
             self.assertEqual(args[1], ["recipient@example.com"])
@@ -108,9 +108,9 @@ class EmailHostsTest(TestCase):
             ).send()
 
             mock_smtp.assert_called()
-            name, args, kwargs = [
+            _name, args, _kwargs = next(
                 call for call in mock_smtp.method_calls if call[0].endswith(".sendmail")
-            ][0]
+            )
 
             self.assertEqual(args[0], "no-reply@example.com")
             self.assertEqual(args[1], ["recipient@example.com"])
